@@ -1,0 +1,12 @@
+#
+# mod-gathering-yield
+#
+# SQL multiplies node/fish/skin MinCount/MaxCount. Companion skill-gain is a core rate:
+#   SkillGain.Gathering = 3
+#
+[worldserver]
+
+# GatheringYield.Multiplier
+#        Description: Documented intended loot multiplier (SQL baked for 3x)
+#        Default: 3
+GatheringYield.Multiplier = 3
