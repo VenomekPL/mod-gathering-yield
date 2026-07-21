@@ -9,10 +9,9 @@ public:
 
     void OnAfterConfigLoad(bool /*reload*/) override
     {
-        // SQL-only module: world updates live under data/sql/. Conf flag is informational.
-        bool enabled = sConfigMgr->GetOption<uint32>("GatheringYield.Multiplier", 3) > 0;
-        if (enabled)
-            LOG_INFO("server.loading", "GatheringYield: module present (SQL updates via module data/sql)");
+        uint32 mult = sConfigMgr->GetOption<uint32>("GatheringYield.Multiplier", 3);
+        if (mult)
+            LOG_INFO("server.loading", "GatheringYield: module present ({}x yields via SQL)", mult);
     }
 };
 

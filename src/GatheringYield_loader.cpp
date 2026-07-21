@@ -1,6 +1,6 @@
 void AddGatheringYieldScripts();
 
-void Addmod_gathering_yield_Scripts()
+void Addmod_gathering_yieldScripts()
 {
     AddGatheringYieldScripts();
 }
