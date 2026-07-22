@@ -1,12 +1,33 @@
 # mod-gathering-yield
 
-Triples mining/herbalism node yields and fishing/skinning loot counts (trunks kept at vanilla counts).
+AzerothCore module that triples mining/herbalism **node** yields and fishing/skinning loot counts (chests/trunks kept at vanilla counts).
 
-## Warning
+## Purpose / scope
 
-The gathering SQL multiplies existing counts. Apply once on a clean DB. A corrective update is included for realms that previously double-applied.
+| Layer | Role |
+|-------|------|
+| Module SQL | Multiplies existing `MinCount`/`MaxCount` on gathering loot |
+| `GatheringYield.Multiplier` in conf | Documents intended multiplier (SQL baked for **3×**) |
+| Core `SkillGain.Gathering = 3` | Companion skill-up rate — set in `worldserver.conf` |
 
-## Companion config
+**Warning:** SQL multiplies whatever is already in the DB. Apply once on a clean baseline. A corrective update is included for realms that previously double-applied.
+
+## Configuration
+
+See `conf/gatheringYield.conf.dist`:
+
+| Key | Default | Meaning |
+|-----|---------|---------|
+| `GatheringYield.Multiplier` | 3 | Documented intended loot multiplier |
+
+## Install
+
+```bash
+cd modules
+git submodule add https://github.com/VenomekPL/mod-gathering-yield.git mod-gathering-yield
+```
+
+Companion core setting:
 
 ```
 SkillGain.Gathering = 3
