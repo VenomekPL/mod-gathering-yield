@@ -1,6 +1,8 @@
 # mod-gathering-yield
 
-AzerothCore module that triples mining/herbalism **node** yields and fishing/skinning loot counts (chests/trunks kept at vanilla counts).
+AzerothCore module that triples mining/herbalism **node** yields and fishing/skinning loot counts.
+
+World chests, fishing trunks, and fishing crates stay at vanilla drop counts (only fish/skin/node yields are ×3).
 
 ## Purpose / scope
 
@@ -10,7 +12,7 @@ AzerothCore module that triples mining/herbalism **node** yields and fishing/ski
 | `GatheringYield.Multiplier` in conf | Documents intended multiplier (SQL baked for **3×**) |
 | Core `SkillGain.Gathering = 3` | Companion skill-up rate — set in `worldserver.conf` |
 
-**Warning:** SQL multiplies whatever is already in the DB. Apply once on a clean baseline. A corrective update is included for realms that previously double-applied.
+**Warning:** SQL multiplies whatever is already in the DB. Apply once on a clean baseline. Corrective updates are included for realms that previously double-applied node loot, or that accidentally ×3'd Solid/Adamantite/Mithril chest contents and fishing crate drop counts (fixed in `2026_07_28_00_revert_chest_crate_x3.sql`).
 
 ## Configuration
 

@@ -1,26 +1,27 @@
 -- Triple fishing (open water + schools) and skinning yields (MinCount/MaxCount).
--- Trunks keep vanilla drop counts; trunk contents (item_loot_template) are unchanged.
+-- Trunks and fishing crates keep vanilla drop counts; their contents (item_loot_template) are unchanged.
+-- Container item IDs: trunks 20708/21113/21150/21228; crates 6351/6352/6357/13874/27513/44475.
 -- Reverts accidental gathering triple on a few fishing pool loot entries first.
--- Reversible: divide affected rows by 3 (except trunks). Reload loot after apply.
+-- Reversible: divide affected rows by 3 (except trunks/crates). Reload loot after apply.
 
 -- Undo gathering-node triple that hit fishing pools / shared loot (restore vanilla counts).
 UPDATE gameobject_loot_template glt
 SET glt.MinCount = GREATEST(1, FLOOR(glt.MinCount / 3)),
     glt.MaxCount = GREATEST(1, FLOOR(glt.MaxCount / 3))
 WHERE glt.Entry IN (17534, 17675)
-  AND glt.Item NOT IN (20708, 21113, 21150, 21228);
+  AND glt.Item NOT IN (20708, 21113, 21150, 21228, 6351, 6352, 6357, 13874, 27513, 44475);
 
 UPDATE gameobject_loot_template
 SET MinCount = GREATEST(1, FLOOR(MinCount / 3)),
     MaxCount = GREATEST(1, FLOOR(MaxCount / 3))
 WHERE Entry = 1415;
 
--- Restore trunk drop counts on fishing pools (leave as vanilla).
+-- Restore trunk/crate drop counts on fishing pools (leave as vanilla).
 UPDATE gameobject_loot_template glt
 JOIN gameobject_template got ON got.Data1 = glt.Entry AND got.type = 25
 SET glt.MinCount = 1,
     glt.MaxCount = 1
-WHERE glt.Item IN (20708, 21113, 21150, 21228)
+WHERE glt.Item IN (20708, 21113, 21150, 21228, 6351, 6352, 6357, 13874, 27513, 44475)
   AND (glt.MinCount <> 1 OR glt.MaxCount <> 1);
 
 -- Open water fishing: reference tables used only by fishing_loot_template.
@@ -30,7 +31,7 @@ SET rlt.MinCount = LEAST(rlt.MinCount * 3, 255),
 WHERE rlt.Entry IN (
     SELECT DISTINCT Reference FROM fishing_loot_template WHERE Reference > 0
 )
-  AND rlt.Item NOT IN (20708, 21113, 21150, 21228);
+  AND rlt.Item NOT IN (20708, 21113, 21150, 21228, 6351, 6352, 6357, 13874, 27513, 44475);
 
 -- Open water fishing: direct item rows (no reference).
 UPDATE fishing_loot_template flt
@@ -38,14 +39,14 @@ SET flt.MinCount = LEAST(flt.MinCount * 3, 255),
     flt.MaxCount = LEAST(flt.MaxCount * 3, 255)
 WHERE flt.Item > 0
   AND flt.Reference = 0
-  AND flt.Item NOT IN (20708, 21113, 21150, 21228);
+  AND flt.Item NOT IN (20708, 21113, 21150, 21228, 6351, 6352, 6357, 13874, 27513, 44475);
 
 -- Fishing schools / pools (gameobject type 25). Skip entries already at vanilla*3 from revert above.
 UPDATE gameobject_loot_template glt
 JOIN gameobject_template got ON got.Data1 = glt.Entry AND got.type = 25
 SET glt.MinCount = LEAST(glt.MinCount * 3, 255),
     glt.MaxCount = LEAST(glt.MaxCount * 3, 255)
-WHERE glt.Item NOT IN (20708, 21113, 21150, 21228)
+WHERE glt.Item NOT IN (20708, 21113, 21150, 21228, 6351, 6352, 6357, 13874, 27513, 44475)
   AND glt.Entry NOT IN (17534, 17675, 1415);
 
 -- Skinning: direct loot rows.

@@ -8,7 +8,9 @@ JOIN (
     SELECT DISTINCT Data1 AS lootid
     FROM gameobject_template
     WHERE Data1 > 0
-      AND name REGEXP 'Vein|Deposit|bloom|root|Lotus|Kelp|Mushroom|Grass|Herb|Bush|Thistle|Swamp|Sungrass|Silversage|Plaguebloom|Icecap|Terocone|Netherbloom|Felweed|Ragveil|Lichen|Goldclover|Tiger Lily|Talandra|Lichbloom|Icethorn|Frost Lotus|Ooze Covered|Incendicite|Indurium|Saronite|Titanium|Cobalt|Adamantite|Khorium|Truesilver|Mithril|Thorium|Rich |Peacebloom|Earthroot|Fadeleaf|Khadgar|Wintersbite|Dreamfoil|Mountain Silversage|Dragonscale|Golden Sansam|Blindweed|Ghost Mushroom|Gromsblood|Arthas|Wild Steelbloom|Grave Moss|Kingsblood|Liferoot|Briarthorn|Bruiseweed|Silverleaf|Mageroyal|Swiftthistle|Firebloom|Purple Lotus|Blood of Heroes|Solid Chest'
+      -- Exclude chests/boxes: ore substrings (Adamantite/Mithril) and Mushroom also match world chests.
+      AND name NOT REGEXP 'Chest|Box of Mushrooms'
+      AND name REGEXP 'Vein|Deposit|bloom|root|Lotus|Kelp|Mushroom|Grass|Herb|Bush|Thistle|Swamp|Sungrass|Silversage|Plaguebloom|Icecap|Terocone|Netherbloom|Felweed|Ragveil|Lichen|Goldclover|Tiger Lily|Talandra|Lichbloom|Icethorn|Frost Lotus|Ooze Covered|Incendicite|Indurium|Saronite|Titanium|Cobalt|Adamantite|Khorium|Truesilver|Mithril|Thorium|Rich |Peacebloom|Earthroot|Fadeleaf|Khadgar|Wintersbite|Dreamfoil|Mountain Silversage|Dragonscale|Golden Sansam|Blindweed|Ghost Mushroom|Gromsblood|Arthas|Wild Steelbloom|Grave Moss|Kingsblood|Liferoot|Briarthorn|Bruiseweed|Silverleaf|Mageroyal|Swiftthistle|Firebloom|Purple Lotus|Blood of Heroes'
 ) nodes ON glt.Entry = nodes.lootid
 SET glt.MinCount = GREATEST(1, FLOOR(glt.MinCount / 3)),
     glt.MaxCount = GREATEST(1, FLOOR(glt.MaxCount / 3))
