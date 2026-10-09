@@ -1,18 +1,29 @@
 # mod-gathering-yield
 
-AzerothCore module that triples mining/herbalism **node** yields and fishing/skinning loot counts.
+AzerothCore module that multiplies gathering yields and daily-quest currency tokens.
 
-World chests, fishing trunks, and fishing crates stay at vanilla drop counts (only fish/skin/node yields are ×3).
+Mining, herbalism, fishing, and skinning use `GatheringYield.Multiplier` (default **3**). That includes:
+
+- ore and herb nodes (including nodes the old name list missed, such as Adder's Tongue)
+- open-water fishing and fishing schools
+- skinning
+- gas clouds (Extract Gas)
+- elemental extraction (creatures you mine, herb, or salvage with engineering)
+
+World chests, fishing trunks, and fishing crates stay at vanilla drop counts.
+
+Daily quests, including heroic dungeon dailies, grant `GatheringYield.DailyTokenMultiplier` (default **3**) currency tokens: emblems, seals, cooking awards, jewelcrafting tokens, and other items with the currency-token bag family. Gear choices and weekly quests are unchanged.
 
 ## Purpose / scope
 
 | Layer | Role |
 |-------|------|
-| Module SQL | Multiplies existing `MinCount`/`MaxCount` on gathering loot |
-| `GatheringYield.Multiplier` in conf | Documents intended multiplier (SQL baked for **3×**) |
-| Core `SkillGain.Gathering = 3` | Companion skill-up rate — set in `worldserver.conf` |
+| Module SQL | Restores gathering loot counts to vanilla after the old baked ×3 updates |
+| `GatheringYield.Multiplier` | Runtime stack-size multiplier for gathering loot |
+| `GatheringYield.DailyTokenMultiplier` | Runtime multiplier for daily/heroic-daily currency tokens |
+| Core `SkillGain.Gathering` | Companion skill-up rate — set in `worldserver.conf` |
 
-**Warning:** SQL multiplies whatever is already in the DB. Apply once on a clean baseline. Corrective updates are included for realms that previously double-applied node loot, or that accidentally ×3'd Solid/Adamantite/Mithril chest contents and fishing crate drop counts (fixed in `2026_07_28_00_revert_chest_crate_x3.sql`).
+The database stores vanilla counts. Change the conf values and reload (or restart) to retune. Do not re-apply the old triple SQL on top of this.
 
 ## Configuration
 
@@ -20,7 +31,8 @@ See `conf/gatheringYield.conf.dist`:
 
 | Key | Default | Meaning |
 |-----|---------|---------|
-| `GatheringYield.Multiplier` | 3 | Documented intended loot multiplier |
+| `GatheringYield.Multiplier` | 3 | Mining, herbalism, fishing, skinning, gas clouds, elemental extraction |
+| `GatheringYield.DailyTokenMultiplier` | 3 | Currency tokens from daily and heroic daily quests |
 
 ## Install
 
