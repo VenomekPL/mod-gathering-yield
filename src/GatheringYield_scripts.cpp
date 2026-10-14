@@ -100,12 +100,13 @@ namespace
 
     void ApplyCount(LootStoreItem* item, uint8 origMin, uint8 origMax, uint32 mult)
     {
-        uint32 mincount = std::min<uint32>(uint32(origMin) * mult, 255u);
+        // Keep the stock minimum. Only the top of the range is multiplied,
+        // so a 1–3 node at 10x becomes 1–30, not 10–30.
         uint32 maxcount = std::min<uint32>(uint32(origMax) * mult, 255u);
-        if (maxcount < mincount)
-            maxcount = mincount;
+        if (maxcount < origMin)
+            maxcount = origMin;
 
-        item->mincount = uint8(mincount);
+        item->mincount = origMin;
         item->maxcount = uint8(maxcount);
     }
 
